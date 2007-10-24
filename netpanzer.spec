@@ -1,15 +1,13 @@
 %define	name	netpanzer
-%define	version	0.8
-%define	dver	0.8
-%define release	%mkrel 2
+%define	version	0.8.2
+%define release	%mkrel 1
 %define	Summary	An online multiplayer tactical warfare game
 
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 URL:		http://netpanzer.berlios.de/
-Source0:	http://download.berlios.de/netpanzer/%{name}-%{version}.tar.bz2
-Source1:	http://download.berlios.de/netpanzer/%{name}-data-%{dver}.tar.bz2
+Source0:  	http://download.berlios.de/netpanzer/%{name}-%{version}.tar.bz2
 Patch0:		netpanzer-gcc-4.1-extra-qualification.patch
 Patch1:		netpanzer-cve-2005-2295.patch
 Patch2:		netpanzer-cve-2006-2575.patch
@@ -39,10 +37,7 @@ collected and converted into weaponry. Players can join or leave
 multiplayer games at any time.
 
 %prep
-%setup -q -a1
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q
 
 %build
 CXXFLAGS="$RPM_OPT_FLAGS -O3" \
@@ -50,19 +45,12 @@ CXXFLAGS="$RPM_OPT_FLAGS -O3" \
 		--bindir=%{_gamesbindir}
 perl -pi -e "s#-g3##g" Jamrules
 jam -d2 %_smp_mflags
-cd %{name}-data-%{dver}
-%configure2_5x	--datadir=%{_gamesdatadir} \
-		--bindir=%{_gamesbindir}
-cd -
 
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
 (jam -s libdir=$RPM_BUILD_ROOT%{_libdir} -s bindir=$RPM_BUILD_ROOT%{_gamesbindir} -s mandir=$RPM_BUILD_ROOT%{_mandir} -s icondir=$RPM_BUILD_ROOT%{_datadir}/pixmaps/ -s appdocdir=docdir -s applicationsdir=$RPM_BUILD_ROOT%{_datadir}/applications/ install)
 cp docs/*.html -f docdir
 
-cd %{name}-data-%{dver}
-jam -s datadir=$RPM_BUILD_ROOT%{_gamesdatadir} install
-cd -
 %{__install} -d $RPM_BUILD_ROOT%{_menudir}
 %{__cat} <<EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
 ?package(%{name}):command="%{_gamesbindir}/%{name}" \
@@ -101,8 +89,8 @@ convert %{name}.png -size 48x48 $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
 %files
 %defattr(644,root,games,755)
 %doc docdir/*
-%{_datadir}/pixmaps/*
-%{_gamesdatadir}/%{name}
+#%{_datadir}/pixmaps/*
+#%{_gamesdatadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
