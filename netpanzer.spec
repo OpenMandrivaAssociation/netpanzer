@@ -51,16 +51,6 @@ jam -d2 %_smp_mflags
 (jam -s libdir=$RPM_BUILD_ROOT%{_libdir} -s bindir=$RPM_BUILD_ROOT%{_gamesbindir} -s mandir=$RPM_BUILD_ROOT%{_mandir} -s icondir=$RPM_BUILD_ROOT%{_datadir}/pixmaps/ -s appdocdir=docdir -s applicationsdir=$RPM_BUILD_ROOT%{_datadir}/applications/ install)
 cp docs/*.html -f docdir
 
-%{__install} -d $RPM_BUILD_ROOT%{_menudir}
-%{__cat} <<EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
-?package(%{name}):command="%{_gamesbindir}/%{name}" \
-		icon=%{name}.png \
-		needs="x11" \
-		section="More Applications/Games/Strategy" \
-		title="netPanzer"\
-		longtitle="%{Summary}"\
-		xdg="true"
-EOF
 
 desktop-file-install --vendor="" \
   --remove-category="Application" \
@@ -95,7 +85,6 @@ convert %{name}.png -size 48x48 $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
-%{_menudir}/%{name}
 %defattr(755,root,games,755)
 %{_gamesbindir}/*
 
