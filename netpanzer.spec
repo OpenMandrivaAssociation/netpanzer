@@ -67,11 +67,15 @@ convert %{name}.png -size 16x16 $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
 convert %{name}.png -size 32x32 $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
 convert %{name}.png -size 48x48 $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
 
+%if %mdkversion < 200900
 %post
 %update_menus
+%endif
 
+%if %mdkversion < 200900
 %postun
 %clean_menus
+%endif
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
