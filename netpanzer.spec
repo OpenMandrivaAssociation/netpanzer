@@ -19,7 +19,7 @@ Group:		Games/Strategy
 Summary:	%{Summary}
 BuildRequires:	SDL_net-devel SDL_mixer-devel SDL_image-devel SDL_ttf-devel
 BuildRequires:	jam libwxgtk-devel physfs-devel libxml2-devel
-BuildRequires:	ImageMagick desktop-file-utils
+BuildRequires:	imagemagick desktop-file-utils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
