@@ -1,26 +1,33 @@
 %define	name	netpanzer
 %define	version	0.8.2
-%define release	%mkrel 3
+%define release	%mkrel 2
 %define	Summary	An online multiplayer tactical warfare game
 
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-URL:		http://netpanzer.berlios.de/
-Source0:  	http://download.berlios.de/netpanzer/%{name}-%{version}.tar.bz2
-Patch0:		netpanzer-gcc-4.1-extra-qualification.patch
-Patch1:		netpanzer-cve-2005-2295.patch
-Patch2:		netpanzer-cve-2006-2575.patch
-#Source10:	%{name}-16x16.png
-#Source11:	%{name}-32x32.png
-#Source12:	%{name}-48x48.png
 License:	GPL
 Group:		Games/Strategy
 Summary:	%{Summary}
-BuildRequires:	SDL_net-devel SDL_mixer-devel SDL_image-devel SDL_ttf-devel
-BuildRequires:	jam libwxgtk-devel physfs-devel libxml2-devel
-BuildRequires:	imagemagick desktop-file-utils
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+URL:		http://netpanzer.berlios.de/
+Source0:  	http://download.berlios.de/netpanzer/%{name}-%{version}.tar.bz2
+Patch3:		netpanzer-0.8.2-fix-format-errors.patch
+Patch4:		netpanzer-0.8.2-fix-stdc++-includes.patch
+Patch5:		netpanzer-0.8.2-fix-crash-x86_64.patch
+#Source10:	%{name}-16x16.png
+#Source11:	%{name}-32x32.png
+#Source12:	%{name}-48x48.png
+BuildRequires:	SDL_net-devel
+BuildRequires:	SDL_mixer-devel
+BuildRequires:	SDL_image-devel
+BuildRequires:	SDL_ttf-devel
+BuildRequires:	jam
+BuildRequires:	libwxgtk-devel
+BuildRequires:	physfs-devel
+BuildRequires:	libxml2-devel
+BuildRequires:	imagemagick
+BuildRequires:	desktop-file-utils
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 netPanzer is an online multiplayer tactical warfare game designed for
@@ -38,6 +45,9 @@ multiplayer games at any time.
 
 %prep
 %setup -q
+%patch3 -p 1
+%patch4 -p 1
+%patch5 -p 1
 
 %build
 CXXFLAGS="$RPM_OPT_FLAGS -O3" \
@@ -47,25 +57,34 @@ perl -pi -e "s#-g3##g" Jamrules
 jam -d2 %_smp_mflags
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-(jam -s libdir=$RPM_BUILD_ROOT%{_libdir} -s bindir=$RPM_BUILD_ROOT%{_gamesbindir} -s mandir=$RPM_BUILD_ROOT%{_mandir} -s icondir=$RPM_BUILD_ROOT%{_datadir}/pixmaps/ -s appdocdir=docdir -s applicationsdir=$RPM_BUILD_ROOT%{_datadir}/applications/ install)
+%{__rm} -rf %{buildroot}
+jam \
+    -s libdir=%{buildroot}%{_libdir} \
+    -s bindir=%{buildroot}%{_gamesbindir} \
+    -s datadir=%{buildroot}%{_gamesdatadir} \
+    -s mandir=%{buildroot}%{_mandir} \
+    -s icondir=%{buildroot}%{_datadir}/pixmaps \
+    -s appdocdir=docdir \
+    -s applicationsdir=%{buildroot}%{_datadir}/applications/ install
 cp docs/*.html -f docdir
+
+mv %{buildroot}%{_gamesdatadir}/pixmaps %{buildroot}%{_datadir}/pixmaps
 
 
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="Game;StrategyGame" \
   --add-category="X-MandrivaLinux-MoreApplications-Games-Strategy" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
 
-#%{__install} %{SOURCE10} -D $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
-#%{__install} %{SOURCE11} -D $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
-#%{__install} %{SOURCE12} -D $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
+#%{__install} %{SOURCE10} -D %{buildroot}%{_miconsdir}/%{name}.png
+#%{__install} %{SOURCE11} -D %{buildroot}%{_iconsdir}/%{name}.png
+#%{__install} %{SOURCE12} -D %{buildroot}%{_liconsdir}/%{name}.png
 
-%{__install} -d $RPM_BUILD_ROOT{%{_miconsdir},%{_iconsdir},%{_liconsdir}}
-convert %{name}.png -size 16x16 $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
-convert %{name}.png -size 32x32 $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
-convert %{name}.png -size 48x48 $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
+%{__install} -d %{buildroot}{%{_miconsdir},%{_iconsdir},%{_liconsdir}}
+convert %{name}.png -size 16x16 %{buildroot}%{_miconsdir}/%{name}.png
+convert %{name}.png -size 32x32 %{buildroot}%{_iconsdir}/%{name}.png
+convert %{name}.png -size 48x48 %{buildroot}%{_liconsdir}/%{name}.png
 
 %if %mdkversion < 200900
 %post
@@ -78,17 +97,16 @@ convert %{name}.png -size 48x48 $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
 %endif
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 %files
-%defattr(644,root,games,755)
+%defattr(-,root,root)
 %doc docdir/*
-#%{_datadir}/pixmaps/*
-#%{_gamesdatadir}/%{name}
+%{_datadir}/pixmaps/*
+%{_gamesdatadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
-%defattr(755,root,games,755)
 %{_gamesbindir}/*
 
