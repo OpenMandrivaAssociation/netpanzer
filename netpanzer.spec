@@ -1,6 +1,6 @@
 %define	name	netpanzer
 %define	version	0.8.2
-%define release	%mkrel 3
+%define release	%mkrel 4
 %define	Summary	An online multiplayer tactical warfare game
 
 Name:		%{name}
