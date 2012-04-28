@@ -40,14 +40,14 @@ multiplayer games at any time.
 %__install -D -m 755 %{name} %{buildroot}%{_gamesbindir}/%{name}
 
 %__mkdir_p %{buildroot}%{_gamesdatadir}/%{name}
-%__cp -pr cache %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr maps %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr pics %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr powerups %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr scripts %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr units %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr wads %{buildroot}%{_gamesdatadir}/%{name}/
-%__cp -pr sound %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r cache %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r maps %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r pics %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r powerups %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r scripts %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r units %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r wads %{buildroot}%{_gamesdatadir}/%{name}/
+%__cp -r sound %{buildroot}%{_gamesdatadir}/%{name}/
 
 %__install -D -m 644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 
