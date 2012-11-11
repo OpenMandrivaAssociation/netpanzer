@@ -1,0 +1,20 @@
+https://bugzilla.redhat.com/show_bug.cgi?id=580241
+
+diff -up netpanzer-0.8.3/SConstruct~ netpanzer-0.8.3/SConstruct
+--- netpanzer-0.8.3/SConstruct~	2011-02-27 23:15:50.809212605 +0200
++++ netpanzer-0.8.3/SConstruct	2011-02-27 23:31:51.462430916 +0200
+@@ -141,11 +141,11 @@ if env['mode'] == 'debug':
+     crosslinuxenv.Append(CCFLAGS = ['-g', '-O0'])
+     crosslinuxenv['FINALEXENAME'] = crosslinuxenv['FINALBUILDDIR'] + 'netpanzer-debug'
+ else:
+-    env.Append(CCFLAGS = ['-O2','-s'])
++    env.Append(CCFLAGS = env['ENV']['RPM_OPT_FLAGS'].split())
+     env['FINALEXENAME'] = 'netpanzer'
+-    crossmingwenv.Append(CCFLAGS = ['-O2','-s'])
++    crossmingwenv.Append(CCFLAGS = env['ENV']['RPM_OPT_FLAGS'].split())
+     crossmingwenv['FINALEXENAME'] = crossmingwenv['FINALBUILDDIR'] + 'netpanzer'
+-    crosslinuxenv.Append(CCFLAGS = ['-O2','-s'])
++    crosslinuxenv.Append(CCFLAGS = env['ENV']['RPM_OPT_FLAGS'].split())
+     crosslinuxenv['FINALEXENAME'] = crosslinuxenv['FINALBUILDDIR'] + 'netpanzer'
+ 
+ env.Append(CCFLAGS = ['-Wall'])
