@@ -1,0 +1,11 @@
+--- src/Lib/ArrayUtil/QueueTemplate.hpp~	2012-01-05 10:04:04.000000000 -0600
++++ src/Lib/ArrayUtil/QueueTemplate.hpp	2012-01-06 08:16:58.960868244 -0600
+@@ -42,7 +42,7 @@
+ 
+     bool enqueue(const TYPE& object )
+     {
+-        add( object, (rear + 1) % this->size );
++        this->add( object, (rear + 1) % this->size );
+         rear = (rear + 1) % this->size;
+ 
+         if ( front == rear )
