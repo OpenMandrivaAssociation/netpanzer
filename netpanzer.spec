@@ -1,6 +1,6 @@
 Name:		netpanzer
 Version:	0.8.4
-Release:	2
+Release:	3
 Summary:	An online multiplayer tactical warfare game
 License:	GPLv2+
 Group:		Games/Strategy
