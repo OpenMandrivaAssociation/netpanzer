@@ -4,7 +4,7 @@ Release:	3
 Summary:	An online multiplayer tactical warfare game
 License:	GPLv2+
 Group:		Games/Strategy
-URL:		http://netpanzer.berlios.de/
+URL:		https://netpanzer.berlios.de/
 Source0:	http://download.berlios.de/netpanzer/%{name}-%{version}.tar.bz2
 Patch0:		netpanzer-0.8.4-gcc470.patch
 Patch1:		netpanzer-0.8.4-optflags.patch
